@@ -16,7 +16,7 @@ for i in range(L, 101):
         # 나머지가 0인 경우 -> 홀수만 가능
         print_range(q - (i // 2), q + (i // 2))
         exit()
-    elif i % 2 == 0 and r != 0 and N % (2 * q + 1) == 0:
+    elif i % 2 == 0 and N % (2 * q + 1) == 0:
         # 나머지가 0이 아닌 경우 -> 몫 +1 했을 때의 값으로 나누어 떨어져야 함
         print_range(q - (i // 2) + 1, q + (i // 2))
         exit()
