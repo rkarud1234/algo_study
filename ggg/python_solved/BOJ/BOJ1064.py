@@ -1,3 +1,5 @@
+import math
+
 xA, yA, xB, yB, xC, yC = map(int, input().split())
 
 def get_slope(x1, y1, x2, y2):
@@ -6,7 +8,6 @@ def get_slope(x1, y1, x2, y2):
     return (y2 - y1) / (x2 - x1)
 
 def get_distance(x1, y1, x2, y2):
-    import math
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 # 1. 세 점이 삼각형이 될 수 있는지 확인하기
