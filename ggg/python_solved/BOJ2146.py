@@ -40,19 +40,19 @@ dist = [[0] * N for _ in range(N)]
 while lands:
     size = len(lands)
     for s in range(size):
-        cur = lands.popleft()
+        i, j, group_no = lands.popleft()
         
         for d in range(0, 4):
-            ni = cur[0] + move[d][0]
-            nj = cur[1] + move[d][1]
+            ni = i + move[d][0]
+            nj = j + move[d][1]
 
-            if 0 <= ni < N and 0 <= nj < N and cur[2] != grid[ni][nj]: # 같은 육지번호일경우는 체크하지 않는다
+            if 0 <= ni < N and 0 <= nj < N and group_no != grid[ni][nj]: # 같은 육지번호일경우는 체크하지 않는다
                 if grid[ni][nj] == 0: # 바다인 경우 계속 진행
-                    lands.append((ni, nj, cur[2]))
-                    dist[ni][nj] = dist[cur[0]][cur[1]] + 1
-                    grid[ni][nj] = cur[2]
+                    lands.append((ni, nj, group_no))
+                    dist[ni][nj] = dist[i][j] + 1
+                    grid[ni][nj] = group_no
                 else: # 다른 육지번호를 만난 경우
-                    ans = min(ans, dist[cur[0]][cur[1]] + dist[ni][nj])
+                    ans = min(ans, dist[i][j] + dist[ni][nj])
 
 print(ans)
 
