@@ -10,10 +10,10 @@ def DP(N):
 
     for i in range(N, -1, -1):
         for j in range(N, -1, -1):
-            if 0<=i+1<N+1 and 0<=j-1<N+1:
-                dp[i][j] += dp[i+1][j-1]
-            if 0<=j+1<N+1:
-                dp[i][j] += dp[i][j+1]
+            if 0<=i-1<N+1 and 0<=j+1<N+1:
+                dp[i-1][j+1] += dp[i][j]
+            if 0<=j-1<N+1:
+                dp[i][j-1] += dp[i][j]
     print(dp[0][0])
 for i in l:
     DP(i)
