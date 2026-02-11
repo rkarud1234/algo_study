@@ -36,27 +36,22 @@ public class BOJ1030 {
         } else {
             for (int i = r1; i <= r2; i++) {
                 for (int j = c1; j <= c2; j++) {
-                    int times = (int) (Math.log(Math.max(i, j)) / Math.log(3)) + 1;
-                    System.out.print(go(i, j, times));
+                    System.out.print(go(i, j));
                 }
                 System.out.println();
             }
         }
     }
 
-    private static int go(int i, int j, int times) {
+    private static int go(int i, int j) {
         if (i < N && j < N)
             return grid[i][j];
 
-        int before = go(i / pow(N, times - 1), j / pow(N, times - 1), times - 1);
+        int before = go(i / N, j / N);
         if (before == 0) {
-            return go(i % pow(N, times - 1), j % pow(N, times - 1), times - 1);
+            return go(i % N, j % N);
         } else {
             return 1;
         }
-    }
-
-    private static int pow(int n, int k) {
-        return (int) Math.pow(n, k);
     }
 }
