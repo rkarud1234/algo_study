@@ -9,7 +9,7 @@ elif N == 2:
     print('A')
 else:
     # 수열의 변동폭을 구하면 a를 알 수 있다.
-    if nums[1] == nums[0] or (nums[2] - nums[1]) % (nums[1] - nums[0]) != 0:
+    if nums[1] == nums[0]:
         a = b = "err"
     else:
         a = (nums[2] - nums[1]) // (nums[1] - nums[0])
