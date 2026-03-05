@@ -24,7 +24,6 @@ def dijkstra(start, end):
 
 ans = 0
 for i in range(1, N+1):
-    if X == i: continue
     ans = max(ans, dijkstra(i,X) + dijkstra(X,i))
 
 print(ans)
