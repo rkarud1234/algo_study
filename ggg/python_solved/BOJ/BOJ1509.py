@@ -15,6 +15,4 @@ for i in range(LEN):
     palindrome(i, i) # 홀수인 경우
     palindrome(i-1, i) # 짝수인 경우
 
-    arr[i] = min(arr[i-1] + 1, arr[i])
-
 print(arr[LEN-1])
