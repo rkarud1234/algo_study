@@ -17,69 +17,55 @@
 # 출력
 # 첫째 줄에 그룹의 수를, 둘째 줄에 가장 크기가 큰 그룹에 속한 선분의 개수를 출력한다.
 from collections import Counter
+import sys
+sys.setrecursionlimit(100000)
 
 N = int(input())
 
 points = [list(map(int, input().split())) for _ in range(N)]
 
-def get_func(x1, y1, x2, y2):
-    if x1 == x2:
-        return "X", x1
-    a = (y1 - y2) / (x1 - x2)
-    b = y1 - a*x1
-    print(a,b)
-    return a, b
+def get_func2(x1, y1, x2, y2):
+    return y1 - y2, x1*y2 - x2*y1, x1 - x2
 
-def check(cross_point, points):
+def check_intersection(point0, point1):
+    # 두 점이 같은 직선 상인 경우 범위 체크
+    x11, y11, x12, y12 = point0
+    x21, y21, x22, y22 = point1
 
-    cx, cy = cross_point
-    x1, y1, x2, y2 = points
+    # point0 기준
+    lx1, hx1 = min(x11, x12), max(x11, x12)
+    ly1, hy1 = min(y11, y12), max(y11, y12)
 
-    lx, hx = min(x1,x2), max(x1,x2)
-    ly, hy = min(y1,y2), max(y1,y2)
+    lx2, hx2 = min(x21, x22), max(x21, x22)
+    ly2, hy2 = min(y21, y22), max(y21, y22)
 
-    return (lx <= cx <= hx) and (ly <= cy <= hy)
+    # 축과 평행한 직선들 대비하여 x,y 모두 체크
+    x1check = (lx1 <= x21 <= hx1) or (lx1 <= x22 <= hx1)
+    y1check = (ly1 <= y21 <= hy1) or (ly1 <= y22 <= hy1)
 
-def check2(point0, point1):
-    x1, y1, x2, y2 = point0
-    lx0, hx0 = min(x1,x2), max(x1,x2)
-    ly0, hy0 = min(y1,y2), max(y1,y2)
-    x1, y1, x2, y2 = point1
-    lx1, hx1 = min(x1,x2), max(x1,x2)
-    ly1, hy1 = min(y1,y2), max(y1,y2)
-
-
-    if lx0 < lx1:
-        xcheck = lx1 <= hx0
-    else:
-        xcheck = lx0 <= hx1
-
-    if ly0 < ly1:
-        ycheck = ly1 <= hy0
-    else:
-        ycheck = ly0 <= hy1
+    x2check = (lx2 <= x11 <= hx2) or (lx2 <= x12 <= hx2)
+    y2check = (ly2 <= y11 <= hy2) or (ly2 <= y12 <= hy2)
     
-    return xcheck and ycheck 
+    return (x1check and y1check) or (x2check and y2check)
 
-def meet(point0, point1):
+
+def meet2(point0, point1):
+    a0, b0, c0 = get_func2(*point0)
+    a1, b1, c1 = get_func2(*point1)
     
-    a0, b0 = get_func(*point0)
-    a1, b1 = get_func(*point1)
+    x1,y1,x2,y2 = point0
+    is_point0_cross = (x1 * a1 + b1 - y1 * c1) * (x2 * a1 + b1 - y2 * c1) <= 0
     
-    if (a0 == "X" and a1 =="X") or (a0==a1):
-        if b0 == b1:
-            return check2(point0, point1)
-        else:
-            return False
-    elif a0 == "X":
-        cross_point = (b0, a1 * b0 + b1)
-    elif a1 == "X":
-        cross_point = (b1, a0 * b1 + b0)
-    else:
-        cross_point = ((b1 - b0) / (a0 - a1), (a0*b1 - b0*a1) / (a0 - a1))
+    x1,y1,x2,y2 = point1
+    is_point1_cross = (x1 * a0 + b0 - y1 * c0) * (x2 * a0 + b0 - y2 * c0) <= 0
+
+    # 두번째 선분의 두점이 모두 첫번째 직선상에 있는 경우
+    if (x1 * a0 + b0 - y1 * c0 == 0) and (x2 * a0 + b0 - y2 * c0 == 0):
+        return check_intersection(point0, point1)
     
-    return check(cross_point, point0) and check(cross_point, point1)
-    
+    return is_point0_cross and is_point1_cross
+
+
 
 result = [0 for _ in range(N)]
 
@@ -90,7 +76,7 @@ def dfs(idx, group_num):
 
     for j in range(N):
         if result[j] == 0:
-            if meet(now, points[j]):
+            if meet2(now, points[j]):
                 result[j] = group_num
                 dfs(j, group_num)
 
@@ -98,6 +84,7 @@ for i in range(N):
     if result[i] == 0:
         group_num += 1
         dfs(i, group_num)
+
 
 c = Counter(result)
 print(len(c))
